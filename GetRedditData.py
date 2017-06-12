@@ -11,14 +11,55 @@ class GenData(object):
                              password= secrets.password,
                              user_agent='chatbot',
                              username= secrets.user)
-    def getComments(self):
+    def qualifyData(self, string):
+        string = string.lower()
+        if len(string) > 600:
+            return False
+        if string == " ":
+            return False
+        if "deleted" in string:
+            return False
+        if "removed" in string:
+            return False
+        if "http://" in string:
+            return False
+        if "https://" in string:
+            return False
+        if "edit:" in string:
+            return False
+        if "edited:" in string:
+            return False
+        return True
+    def stringJoin(self, string):
+        splitStr = string.split('\n')
+        strJoin = ""
+        for s in splitStr:
+            #print ("SPLIT " + s)
+            strJoin += s
+        return strJoin
+
+    def generateData(self):
+        count = 0
         subreddit = self.reddit.subreddit(self.subreddit)
-        for comment in subreddit.stream.comments():
-            if ('*' not in comment.body):
-                print (comment.body)
+        top = subreddit.top('all')
+        for thread in top:
+            print (thread.title)
+            #One off post that all has the same comments...not the best for our dataset :)
+            if (thread.title == "What bot accounts on reddit should people know about?"):
+                continue
+            thread.comments.replace_more(limit=0)
+            for comment in list(thread.comments):
+                if (self.qualifyData(comment.body)):
+                    #TODO: split comment into master/highest rated child and write to two files
+                    print (self.stringJoin(comment.body))
+                    print ("--------------")
+                    count += 1
+            break
+        print(count)
+
 def main():
     askreddit = GenData("askreddit")
-    askreddit.getComments()
+    askreddit.generateData()
 
 if __name__ == '__main__':
 	main()
