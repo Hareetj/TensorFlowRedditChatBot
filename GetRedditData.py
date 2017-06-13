@@ -29,7 +29,11 @@ class GenData(object):
             return False
         if "edited:" in string:
             return False
+        isascii = lambda string: len(string) == len(string.encode())
+        if not isascii(string):
+            return False
         return True
+
     def stringJoin(self, string):
         splitStr = string.split('\n')
         strJoin = ""
@@ -49,27 +53,36 @@ class GenData(object):
                 continue
             #increase limit for bigger dataset
             thread.comments.replace_more(limit=0)
-            for comment in thread.comments:
+            #thread.comments = top level comments forest
+            top_level = None
+            child = None
+            for comment in thread.comments.list():
                 if (self.qualifyData(comment.body)):
-                    #TODO: split comment into master/highest rated child and write to two files
-                    #TODO: Only write to file if top level comment has a subcomment
-                    print (self.stringJoin(comment.body))
-                    comment.replies.replace_more(limit=4)
+                    #print ("Top Level Comment: " + self.stringJoin(comment.body))
+                    top_level = self.stringJoin(comment.body)
+                    comment.replies.replace_more(limit=None, threshold=0)
                     for c in comment.replies:
+                        #print ("Original subcomment: " + c.body)
                         if self.qualifyData(c.body):
-                            print (self.stringJoin(c.body))
+                            #print ("actually chosen: " + self.stringJoin(c.body))
+                            child = self.stringJoin(c.body)
                             break
-                        else:
-                            print ("did not qualify")
-                    print ("--------------")
-                    count += 1
-
-            break
+                    if top_level is not None and child is not None:
+                        #print ("input: " + top_level)
+                        #print ("output: " + child)
+                        with open("input", 'a') as input:
+                            input.write(str(top_level) + '\n')
+                        with open("output", 'a') as out:
+                            out.write(str(child) + '\n')
+                        top_level = None
+                        child = None
+                        count += 1
         print(count)
 
 def main():
-    askreddit = GenData("askreddit")
-    askreddit.generateData()
+    #multireddit = GenData("seduction+askreddit+science+politics+theredpill+philosophy")
+    multireddit = GenData("askreddit")
+    multireddit.generateData()
 
 if __name__ == '__main__':
 	main()
