@@ -47,13 +47,23 @@ class GenData(object):
             #One off post that all has the same comments...not the best for our dataset :)
             if (thread.title == "What bot accounts on reddit should people know about?"):
                 continue
+            #increase limit for bigger dataset
             thread.comments.replace_more(limit=0)
-            for comment in list(thread.comments):
+            for comment in thread.comments:
                 if (self.qualifyData(comment.body)):
                     #TODO: split comment into master/highest rated child and write to two files
+                    #TODO: Only write to file if top level comment has a subcomment
                     print (self.stringJoin(comment.body))
+                    comment.replies.replace_more(limit=4)
+                    for c in comment.replies:
+                        if self.qualifyData(c.body):
+                            print (self.stringJoin(c.body))
+                            break
+                        else:
+                            print ("did not qualify")
                     print ("--------------")
                     count += 1
+
             break
         print(count)
 
