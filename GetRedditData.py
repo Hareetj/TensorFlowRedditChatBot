@@ -11,9 +11,12 @@ class GenData(object):
                              password= secrets.password,
                              user_agent='chatbot',
                              username= secrets.user)
+
     def qualifyData(self, string):
         string = string.lower()
-        if len(string) > 600:
+        if len(string) > 1000:
+            return False
+        if len(string) < 10:
             return False
         if string == " ":
             return False
@@ -42,20 +45,32 @@ class GenData(object):
             strJoin += s
         return strJoin
 
+    def writeToFile (self, top_level, child):
+        if top_level is not None:
+            if child is not None:
+                # print ("input: " + top_level)
+                # print ("output: " + child)
+                with open("input", 'a') as input:
+                    input.write(str(top_level) + '\n')
+                with open("output", 'a') as out:
+                    out.write(str(child) + '\n')
+                return True
+        return False
+
     def generateData(self):
         count = 0
+        print ("######### " + self.subreddit + " ############")
         subreddit = self.reddit.subreddit(self.subreddit)
-        top = subreddit.top('all')
+        top = subreddit.top('all' , limit = 40)
+        top_level = None
+        child = None
         for thread in top:
-            print (thread.title)
+            #print (thread.title)
             #One off post that all has the same comments...not the best for our dataset :)
             if (thread.title == "What bot accounts on reddit should people know about?"):
                 continue
             #increase limit for bigger dataset
             thread.comments.replace_more(limit=0)
-            #thread.comments = top level comments forest
-            top_level = None
-            child = None
             for comment in thread.comments.list():
                 if (self.qualifyData(comment.body)):
                     #print ("Top Level Comment: " + self.stringJoin(comment.body))
@@ -66,23 +81,26 @@ class GenData(object):
                         if self.qualifyData(c.body):
                             #print ("actually chosen: " + self.stringJoin(c.body))
                             child = self.stringJoin(c.body)
+                            if (self.writeToFile(top_level, child)):
+                                count += 1
+                            top_level = None
+                            child = None
                             break
-                    if top_level is not None and child is not None:
-                        #print ("input: " + top_level)
-                        #print ("output: " + child)
-                        with open("input", 'a') as input:
-                            input.write(str(top_level) + '\n')
-                        with open("output", 'a') as out:
-                            out.write(str(child) + '\n')
-                        top_level = None
-                        child = None
-                        count += 1
+
         print(count)
 
 def main():
-    #multireddit = GenData("seduction+askreddit+science+politics+theredpill+philosophy")
-    multireddit = GenData("askreddit")
-    multireddit.generateData()
+    #splititng into specific subreddits allows more control over content
+    askreddit = GenData("askreddit")
+    askreddit.generateData()
+    philosophy = GenData("philosophy")
+    philosophy.generateData()
+    casualConv = GenData("casualconversation")
+    casualConv.generateData()
+    ama = GenData("iama")
+    ama.generateData()
+    all = GenData("all")
+    all.generateData()
 
 if __name__ == '__main__':
 	main()

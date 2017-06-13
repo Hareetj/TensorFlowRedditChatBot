@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9eae8e2c-69cb-42fe-a100-d718e6daebe5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GetRedditData.py" afterPath="$PROJECT_DIR$/GetRedditData.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/input" afterPath="$PROJECT_DIR$/input" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output" afterPath="$PROJECT_DIR$/output" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,11 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GetRedditData.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GetRedditData.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GetRedditData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="434">
-              <caret line="82" column="86" lean-forward="false" selection-start-line="82" selection-start-column="86" selection-end-line="82" selection-end-column="86" />
+            <state relative-caret-position="401">
+              <caret line="101" column="22" lean-forward="false" selection-start-line="101" selection-start-column="22" selection-end-line="101" selection-end-column="22" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -50,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="input" pinned="false" current-in-tab="false">
+      <file leaf-file-name="input" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/input">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-41722">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="712800">
+              <caret line="21600" column="0" lean-forward="true" selection-start-line="21600" selection-start-column="0" selection-end-line="21600" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -63,7 +64,7 @@
       <file leaf-file-name="output" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/output">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-41524">
+            <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -94,6 +95,7 @@
       <find>main</find>
       <find>de</find>
       <find>pride</find>
+      <find>is there an ac</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -403,15 +405,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/output">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-41524">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/input">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-41722">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -419,11 +413,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GetRedditData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="82" column="86" lean-forward="false" selection-start-line="82" selection-start-column="86" selection-end-line="82" selection-end-column="86" />
+        <state relative-caret-position="401">
+          <caret line="101" column="22" lean-forward="false" selection-start-line="101" selection-start-column="22" selection-end-line="101" selection-end-column="22" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/input">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="712800">
+          <caret line="21600" column="0" lean-forward="true" selection-start-line="21600" selection-start-column="0" selection-end-line="21600" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
