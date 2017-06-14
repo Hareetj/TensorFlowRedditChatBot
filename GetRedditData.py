@@ -57,11 +57,11 @@ class GenData(object):
                 return True
         return False
 
-    def generateData(self):
+    def generateData(self, age = 'all', limit = '40'):
         count = 0
         print ("######### " + self.subreddit + " ############")
         subreddit = self.reddit.subreddit(self.subreddit)
-        top = subreddit.top('all' , limit = 40)
+        top = subreddit.top(age, limit = int(limit))
         top_level = None
         child = None
         for thread in top:
@@ -93,14 +93,19 @@ def main():
     #splititng into specific subreddits allows more control over content
     askreddit = GenData("askreddit")
     askreddit.generateData()
+    askreddit.generateData("week", 20)
     philosophy = GenData("philosophy")
     philosophy.generateData()
+    philosophy.generateData("week", 20)
     casualConv = GenData("casualconversation")
     casualConv.generateData()
+    casualConv.generateData("week", 20)
     ama = GenData("iama")
     ama.generateData()
+    ama.generateData("week", 20)
     all = GenData("all")
     all.generateData()
+    all.generateData("week", 20)
 
 if __name__ == '__main__':
 	main()
