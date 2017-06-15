@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9eae8e2c-69cb-42fe-a100-d718e6daebe5" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/output" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GetRedditData.py" afterPath="$PROJECT_DIR$/GetRedditData.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/input" afterPath="$PROJECT_DIR$/input" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output" afterPath="$PROJECT_DIR$/output" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -39,7 +38,7 @@
         <entry file="file://$PROJECT_DIR$/input">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-671221">
-              <caret line="26955" column="26" lean-forward="false" selection-start-line="26955" selection-start-column="22" selection-end-line="26955" selection-end-column="26" />
+              <caret line="26955" column="26" lean-forward="false" selection-start-line="26955" selection-start-column="26" selection-end-line="26955" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -48,7 +47,7 @@
       <file leaf-file-name="output" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/output">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-719477">
+            <state relative-caret-position="-718025">
               <caret line="25496" column="88" lean-forward="true" selection-start-line="25496" selection-start-column="88" selection-end-line="25496" selection-end-column="88" />
               <folding />
             </state>
@@ -764,14 +763,14 @@
     <entry file="file://$PROJECT_DIR$/input">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-671221">
-          <caret line="26955" column="26" lean-forward="false" selection-start-line="26955" selection-start-column="22" selection-end-line="26955" selection-end-column="26" />
+          <caret line="26955" column="26" lean-forward="false" selection-start-line="26955" selection-start-column="26" selection-end-line="26955" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/output">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-719477">
+        <state relative-caret-position="-718025">
           <caret line="25496" column="88" lean-forward="true" selection-start-line="25496" selection-start-column="88" selection-end-line="25496" selection-end-column="88" />
           <folding />
         </state>
