@@ -1,3 +1,5 @@
+import re
+
 import praw
 import secrets
 
@@ -45,6 +47,9 @@ class GenData(object):
         strJoin = ""
         for s in splitStr:
             strJoin += s + " "
+        strJoin #= re.sub('[ \t\n]+', ' ', strJoin)
+        strJoin = re.sub('\^', '', strJoin)
+        strJoin = re.sub('\\\\', '', strJoin)
         return strJoin
 
     def writeToFile (self, top_level, child):
@@ -95,20 +100,20 @@ class GenData(object):
 def main():
     #splititng into specific subreddits allows more control over content
     askreddit = GenData("askreddit")
-    #askreddit.generateData()
-    askreddit.generateData("week",30)
-    philosophy = GenData("philosophy")
+    askreddit.generateData()
+    #askreddit.generateData("week",30)
+    #philosophy = GenData("philosophy")
     #philosophy.generateData()
-    philosophy.generateData("week",30)
-    casualConv = GenData("casualconversation")
+    #philosophy.generateData("week",30)
+    #casualConv = GenData("casualconversation")
     #casualConv.generateData()
-    casualConv.generateData("week", 30)
-    ama = GenData("iama")
+    #casualConv.generateData("week", 30)
+    #ama = GenData("iama")
     #ama.generateData()
-    ama.generateData("week", 30)
-    all = GenData("all")
+    #ama.generateData("week", 30)
+    #all = GenData("all")
     #all.generateData()
-    all.generateData("week", 30)
+    #all.generateData("week", 30)
 
 if __name__ == '__main__':
     main()
