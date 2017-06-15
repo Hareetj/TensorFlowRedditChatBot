@@ -1,5 +1,4 @@
 import praw
-
 import secrets
 
 
@@ -42,7 +41,7 @@ class GenData(object):
         strJoin = ""
         for s in splitStr:
             #print ("SPLIT " + s)
-            strJoin += s
+            strJoin += s + " "
         return strJoin
 
     def writeToFile (self, top_level, child):
@@ -57,7 +56,7 @@ class GenData(object):
                 return True
         return False
 
-    def generateData(self, age = 'all', limit = '40'):
+    def generateData(self, age = 'all', limit = '100'):
         count = 0
         print ("######### " + self.subreddit + " ############")
         subreddit = self.reddit.subreddit(self.subreddit)
@@ -66,27 +65,30 @@ class GenData(object):
         child = None
         for thread in top:
             #print (thread.title)
-            #One off post that all has the same comments...not the best for our dataset :)
+            #One off posts that all has the same comments...not the best for our dataset :)
             if (thread.title == "What bot accounts on reddit should people know about?"):
                 continue
+            if (thread.title == "You and a super intelligent snail both get 1 million dollars, and you both become immortal, however you die if the snail touches you. It always knows where you are and slowly crawls toward you. What's your plan?"):
+                continue
             #increase limit for bigger dataset
-            thread.comments.replace_more(limit=0)
-            for comment in thread.comments.list():
+            thread.comments.replace_more(limit=1)
+            #Use this command to get all replies for top level -> second level, seconed level - > third level, etc
+            #for comment in list(thread.comments):
+            for comment in list(thread.comments):
                 if (self.qualifyData(comment.body)):
                     #print ("Top Level Comment: " + self.stringJoin(comment.body))
                     top_level = self.stringJoin(comment.body)
                     comment.replies.replace_more(limit=None, threshold=0)
-                    for c in comment.replies:
+                    for c in list(comment.replies):
                         #print ("Original subcomment: " + c.body)
                         if self.qualifyData(c.body):
                             #print ("actually chosen: " + self.stringJoin(c.body))
                             child = self.stringJoin(c.body)
-                            if (self.writeToFile(top_level, child)):
-                                count += 1
-                            top_level = None
-                            child = None
                             break
-
+                if (self.writeToFile(top_level, child)):
+                    count += 1
+                top_level = None
+                child = None
         print(count)
 
 def main():
@@ -108,4 +110,4 @@ def main():
     all.generateData("week", 20)
 
 if __name__ == '__main__':
-	main()
+    main()
