@@ -12,6 +12,7 @@ class GenData(object):
                              password= secrets.password,
                              user_agent='chatbot',
                              username= secrets.user)
+        self.start = 1
 
     def qualifyData(self, string):
         string = string.lower()
@@ -47,7 +48,7 @@ class GenData(object):
         strJoin = ""
         for s in splitStr:
             strJoin += s + " "
-        strJoin #= re.sub('[ \t\n]+', ' ', strJoin)
+        strJoin = re.sub('[ \t\n]+', ' ', strJoin)
         strJoin = re.sub('\^', '', strJoin)
         strJoin = re.sub('\\\\', '', strJoin)
         return strJoin
@@ -56,13 +57,14 @@ class GenData(object):
         if top_level is not None:
             if child is not None:
                 with open("input", 'a') as input:
-                    input.write(str(top_level) + '\n')
+                    input.write(top_level + "#### " + str(self.start) + '\n')
                 with open("output", 'a') as out:
-                    out.write(str(child) + '\n')
+                    out.write(child + "#### " + str(self.start) + '\n')
+                self.start += 1
                 return True
         return False
 
-    def generateData(self, age = 'all', limit = '50'):
+    def generateData(self, age = 'all', limit = '100'):
         count = 0
         print ("######### " + self.subreddit + " ############")
         subreddit = self.reddit.subreddit(self.subreddit)
@@ -80,10 +82,10 @@ class GenData(object):
             thread.comments.replace_more(limit=0)
             #Use this command to get all replies for top level -> second level, seconed level - > third level, etc
             #for comment in thread.comments.list():
-            for comment in list(thread.comments):
+            for comment in thread.comments.list():
                 if (self.qualifyData(comment.body)):
-                    #print ("Top Level Comment: " + self.stringJoin(comment.body))
                     top_level = self.stringJoin(comment.body)
+                    #print ("Top Leve: " + top_level)
                     comment.replies.replace_more(limit=None, threshold=0)
                     for c in list(comment.replies):
                         #print ("Original subcomment: " + c.body)
@@ -91,29 +93,36 @@ class GenData(object):
                             #print ("actually chosen: " + self.stringJoin(c.body))
                             child = self.stringJoin(c.body)
                             break
-                if (self.writeToFile(top_level, child)):
-                    count += 1
-                top_level = None
-                child = None
+                    if (self.writeToFile(top_level, child)):
+                        count += 1
+                    top_level = None
+                    child = None
         print(count)
 
 def main():
     #splititng into specific subreddits allows more control over content
+    white_list = ['askreddit', 'philosopy', 'casualconversation', 'iama', 'all']
+    #for subreddit in white_list:
+    #    mysub = GenData(subreddit)
+    #    mysub.generateData()
+    #    mysub.generateData("week", 30)
+
+    #~ For testing purposes ~
     askreddit = GenData("askreddit")
     askreddit.generateData()
-    #askreddit.generateData("week",30)
-    #philosophy = GenData("philosophy")
-    #philosophy.generateData()
-    #philosophy.generateData("week",30)
-    #casualConv = GenData("casualconversation")
-    #casualConv.generateData()
-    #casualConv.generateData("week", 30)
-    #ama = GenData("iama")
-    #ama.generateData()
-    #ama.generateData("week", 30)
-    #all = GenData("all")
-    #all.generateData()
-    #all.generateData("week", 30)
+    askreddit.generateData("week",30)
+    philosophy = GenData("philosophy")
+    philosophy.generateData()
+    philosophy.generateData("week",30)
+    casualConv = GenData("casualconversation")
+    casualConv.generateData()
+    casualConv.generateData("week", 30)
+    ama = GenData("iama")
+    ama.generateData()
+    ama.generateData("week", 30)
+    all = GenData("all")
+    all.generateData()
+    all.generateData("week", 30)
 
 if __name__ == '__main__':
     main()
