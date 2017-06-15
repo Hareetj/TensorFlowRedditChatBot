@@ -74,8 +74,8 @@ class GenData(object):
             #increase limit for bigger dataset
             thread.comments.replace_more(limit=0)
             #Use this command to get all replies for top level -> second level, seconed level - > third level, etc
-            #for comment in list(thread.comments):
-            for comment in thread.comments.list():
+            #for comment in thread.comments.list():
+            for comment in list(thread.comments):
                 if (self.qualifyData(comment.body)):
                     #print ("Top Level Comment: " + self.stringJoin(comment.body))
                     top_level = self.stringJoin(comment.body)
@@ -95,20 +95,20 @@ class GenData(object):
 def main():
     #splititng into specific subreddits allows more control over content
     askreddit = GenData("askreddit")
-    askreddit.generateData()
-    askreddit.generateData("week", 20)
+    #askreddit.generateData()
+    askreddit.generateData("week",30)
     philosophy = GenData("philosophy")
-    philosophy.generateData()
-    philosophy.generateData("week", 20)
+    #philosophy.generateData()
+    philosophy.generateData("week",30)
     casualConv = GenData("casualconversation")
-    casualConv.generateData()
-    casualConv.generateData("week", 20)
+    #casualConv.generateData()
+    casualConv.generateData("week", 30)
     ama = GenData("iama")
-    ama.generateData()
-    ama.generateData("week", 20)
+    #ama.generateData()
+    ama.generateData("week", 30)
     all = GenData("all")
-    all.generateData()
-    all.generateData("week", 20)
+    #all.generateData()
+    all.generateData("week", 30)
 
 if __name__ == '__main__':
     main()
