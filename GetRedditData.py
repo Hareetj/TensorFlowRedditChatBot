@@ -15,7 +15,7 @@ class GenData(object):
         string = string.lower()
         if len(string) > 1000:
             return False
-        if len(string) < 10:
+        if len(string) < 50:
             return False
         if string == " ":
             return False
@@ -34,21 +34,22 @@ class GenData(object):
         isascii = lambda string: len(string) == len(string.encode())
         if not isascii(string):
             return False
+        if "<" in string:
+            return False
+        if ">" in string:
+            return False
         return True
 
     def stringJoin(self, string):
         splitStr = string.split('\n')
         strJoin = ""
         for s in splitStr:
-            #print ("SPLIT " + s)
             strJoin += s + " "
         return strJoin
 
     def writeToFile (self, top_level, child):
         if top_level is not None:
             if child is not None:
-                # print ("input: " + top_level)
-                # print ("output: " + child)
                 with open("input", 'a') as input:
                     input.write(str(top_level) + '\n')
                 with open("output", 'a') as out:
@@ -56,7 +57,7 @@ class GenData(object):
                 return True
         return False
 
-    def generateData(self, age = 'all', limit = '100'):
+    def generateData(self, age = 'all', limit = '50'):
         count = 0
         print ("######### " + self.subreddit + " ############")
         subreddit = self.reddit.subreddit(self.subreddit)
@@ -71,10 +72,10 @@ class GenData(object):
             if (thread.title == "You and a super intelligent snail both get 1 million dollars, and you both become immortal, however you die if the snail touches you. It always knows where you are and slowly crawls toward you. What's your plan?"):
                 continue
             #increase limit for bigger dataset
-            thread.comments.replace_more(limit=1)
+            thread.comments.replace_more(limit=0)
             #Use this command to get all replies for top level -> second level, seconed level - > third level, etc
             #for comment in list(thread.comments):
-            for comment in list(thread.comments):
+            for comment in thread.comments.list():
                 if (self.qualifyData(comment.body)):
                     #print ("Top Level Comment: " + self.stringJoin(comment.body))
                     top_level = self.stringJoin(comment.body)
