@@ -1,12 +1,16 @@
 import re
 
+import _thread
 import praw
+from cffi import lock
+
 import secrets
 import threading
 
-input = open("inputData", 'w')
-output = open("outputData", 'w')
-#
+subreddit_data = list()
+mylock = _thread.allocate_lock()
+num_threads = 0
+thread_started = False
 class GenData(object):
     def __init__(self, subreddit):
         self.subreddit = subreddit
@@ -69,21 +73,26 @@ class GenData(object):
     def writeToFile (self, top_level, child):
         if top_level is not None:
             if child is not None:
-                global input
-                global output
-                input.write(str(top_level) + '\n')
-                output.write(str(child) + '\n')
-                self.start += 1
+                #global input
+                #global output
+                #input.write(str(top_level) + '\n')
+                #output.write(str(child) + '\n')
+                #self.start += 1
                 return True
         return False
 
-    def generateData(self, age = 'all', limit = 200):
+    def generateData(self, age = 'all', limit = 100):
         count = 0
-        print ("######### " + self.subreddit + " ############")
+        #print ("######### " + self.subreddit + " ############")
         subreddit = self.reddit.subreddit(self.subreddit)
         top = subreddit.top(age, limit = (limit))
         top_level = None
         child = None
+        my_dict = dict()
+        global num_threads
+        num_threads += 1
+        global thread_started
+        thread_started = True
         for thread in top:
             #print (thread.title)
             #One off posts that all has the same comments...not the best for our dataset :)
@@ -107,22 +116,43 @@ class GenData(object):
                             child = self.stringJoin(c.body)
                             break
                     if (self.writeToFile(top_level, child)):
+                        my_dict[top_level] = child
                         count += 1
                     top_level = None
                     child = None
-        print(count)
+        mylock.acquire()
+        input = open("inputData", 'a')
+        output = open("outputData", 'a')
+        print("length: " + str(len(my_dict)))
+        for k,v in my_dict.items():
+            input.write(k + "\n")
+            output.write(v + "\n")
+        num_threads -= 1
+        mylock.release()
+        #subreddit_data.append(my_dict)
+        print("Count: " + str(count) + " subreddit: " + self.subreddit)
+        _thread.exit()
 
 def main():
+    global num_threads
+    global thread_started
     #splititng into specific subreddits allows more control over content
-    #white_list = ['philosophy', 'askreddit', 'casualconversation', 'iama', 'all']
-    #for subreddit in white_list:
-    #    mysub = GenData(str(subreddit))
-    #    mysub.generateData()
-    #    mysub.generateData("week", 200)
+    white_list = ['philosophy', 'askreddit', 'casualconversation', 'iama', 'all']
+    #white_list = ['philosophy']
+    for subreddit in white_list:
+        mysub = GenData(str(subreddit))
+        #mysub.generateData()
+        #mysub.generateData("week")
+        _thread.start_new_thread(mysub.generateData, ())
+        _thread.start_new_thread(mysub.generateData, ("week",))
 
+    while not thread_started:
+        pass
+    while num_threads>0:
+        pass
     #~ For testing purposes ~
-    askreddit = GenData("askreddit")
-    askreddit.generateData()
+    #askreddit = GenData("askreddit")
+    #askreddit.generateData()
     #askreddit.generateData("week",5)
     #philosophy = GenData("philosophy")
     #philosophy.generateData()
