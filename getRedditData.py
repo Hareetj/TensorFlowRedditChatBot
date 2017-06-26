@@ -2,8 +2,11 @@ import re
 
 import praw
 import secrets
+import threading
 
-
+input = open("inputData", 'w')
+output = open("outputData", 'w')
+#
 class GenData(object):
     def __init__(self, subreddit):
         self.subreddit = subreddit
@@ -34,6 +37,10 @@ class GenData(object):
             return False
         if "edited:" in string:
             return False
+        if "/u" in string:
+            return False
+        if "/r" in string:
+            return False
         isascii = lambda string: len(string) == len(string.encode())
         if not isascii(string):
             return False
@@ -44,6 +51,12 @@ class GenData(object):
         return True
 
     def stringJoin(self, string):
+        string = string.replace("\r", " ")
+        tempSplit = string.split(" ")
+        temp = ""
+        for c in tempSplit:
+            temp += c + " "
+        string = temp
         splitStr = string.split('\n')
         strJoin = ""
         for s in splitStr:
@@ -56,19 +69,19 @@ class GenData(object):
     def writeToFile (self, top_level, child):
         if top_level is not None:
             if child is not None:
-                with open("input", 'a') as input:
-                    input.write(top_level + "#### " + str(self.start) + '\n')
-                with open("output", 'a') as out:
-                    out.write(child + "#### " + str(self.start) + '\n')
+                global input
+                global output
+                input.write(str(top_level) + '\n')
+                output.write(str(child) + '\n')
                 self.start += 1
                 return True
         return False
 
-    def generateData(self, age = 'all', limit = '100'):
+    def generateData(self, age = 'all', limit = 200):
         count = 0
         print ("######### " + self.subreddit + " ############")
         subreddit = self.reddit.subreddit(self.subreddit)
-        top = subreddit.top(age, limit = int(limit))
+        top = subreddit.top(age, limit = (limit))
         top_level = None
         child = None
         for thread in top:
@@ -101,28 +114,28 @@ class GenData(object):
 
 def main():
     #splititng into specific subreddits allows more control over content
-    white_list = ['askreddit', 'philosopy', 'casualconversation', 'iama', 'all']
+    #white_list = ['philosophy', 'askreddit', 'casualconversation', 'iama', 'all']
     #for subreddit in white_list:
-    #    mysub = GenData(subreddit)
+    #    mysub = GenData(str(subreddit))
     #    mysub.generateData()
-    #    mysub.generateData("week", 30)
+    #    mysub.generateData("week", 200)
 
     #~ For testing purposes ~
     askreddit = GenData("askreddit")
     askreddit.generateData()
-    askreddit.generateData("week",30)
-    philosophy = GenData("philosophy")
-    philosophy.generateData()
-    philosophy.generateData("week",30)
-    casualConv = GenData("casualconversation")
-    casualConv.generateData()
-    casualConv.generateData("week", 30)
-    ama = GenData("iama")
-    ama.generateData()
-    ama.generateData("week", 30)
-    all = GenData("all")
-    all.generateData()
-    all.generateData("week", 30)
+    #askreddit.generateData("week",5)
+    #philosophy = GenData("philosophy")
+    #philosophy.generateData()
+    #philosophy.generateData("week",5)
+    #casualConv = GenData("casualconversation")
+    #casualConv.generateData()
+    #casualConv.generateData("week", 5)
+    #ama = GenData("iama")
+    #ama.generateData()
+    #ama.generateData("week", 5)
+    #all = GenData("all")
+    #all.generateData()
+    #all.generateData("week", 5)
 
 if __name__ == '__main__':
     main()
