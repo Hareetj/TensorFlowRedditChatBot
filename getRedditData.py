@@ -11,6 +11,7 @@ subreddit_data = list()
 mylock = _thread.allocate_lock()
 num_threads = 0
 thread_started = False
+
 class GenData(object):
     def __init__(self, subreddit):
         self.subreddit = subreddit
@@ -19,7 +20,6 @@ class GenData(object):
                              password= secrets.password,
                              user_agent='chatbot',
                              username= secrets.user)
-        self.start = 1
 
     def qualifyData(self, string):
         string = string.lower()
@@ -77,11 +77,10 @@ class GenData(object):
                 #global output
                 #input.write(str(top_level) + '\n')
                 #output.write(str(child) + '\n')
-                #self.start += 1
                 return True
         return False
 
-    def generateData(self, age = 'all', limit = 100):
+    def generateData(self, age = 'all', limit = 500):
         count = 0
         #print ("######### " + self.subreddit + " ############")
         subreddit = self.reddit.subreddit(self.subreddit)
@@ -94,7 +93,6 @@ class GenData(object):
         global thread_started
         thread_started = True
         for thread in top:
-            #print (thread.title)
             #One off posts that all has the same comments...not the best for our dataset :)
             if (thread.title == "What bot accounts on reddit should people know about?"):
                 continue
@@ -106,45 +104,39 @@ class GenData(object):
             #for comment in thread.comments.list():
             for comment in thread.comments.list():
                 if (self.qualifyData(comment.body)):
-                    top_level = self.stringJoin(comment.body)
-                    #print ("Top Leve: " + top_level)
                     comment.replies.replace_more(limit=None, threshold=0)
                     for c in list(comment.replies):
-                        #print ("Original subcomment: " + c.body)
                         if self.qualifyData(c.body):
-                            #print ("actually chosen: " + self.stringJoin(c.body))
-                            child = self.stringJoin(c.body)
+                            child = c.body
                             break
                     if (self.writeToFile(top_level, child)):
+                        child = self.stringJoin(child)
+                        top_level = self.stringJoin(comment.body)
                         my_dict[top_level] = child
                         count += 1
                     top_level = None
                     child = None
+
+        print("Count: " + str(count) + " subreddit: " + self.subreddit)
         mylock.acquire()
-        input = open("inputData", 'a')
-        output = open("outputData", 'a')
-        print("length: " + str(len(my_dict)))
+        input = open("inputTwo", 'a')
+        output = open("outputTwo", 'a')
         for k,v in my_dict.items():
             input.write(k + "\n")
             output.write(v + "\n")
         num_threads -= 1
         mylock.release()
-        #subreddit_data.append(my_dict)
-        print("Count: " + str(count) + " subreddit: " + self.subreddit)
+        print("Done writing: " + self.subreddit)
         _thread.exit()
 
 def main():
     global num_threads
     global thread_started
-    #splititng into specific subreddits allows more control over content
-    white_list = ['philosophy', 'askreddit', 'casualconversation', 'iama', 'all']
-    #white_list = ['philosophy']
+    white_list = ['philosophy', 'askreddit', 'casualconversation', 'iama', 'all', "Showerthoughts"]
     for subreddit in white_list:
         mysub = GenData(str(subreddit))
-        #mysub.generateData()
-        #mysub.generateData("week")
         _thread.start_new_thread(mysub.generateData, ())
-        _thread.start_new_thread(mysub.generateData, ("week",))
+        _thread.start_new_thread(mysub.generateData, ("week", 75))
 
     while not thread_started:
         pass
