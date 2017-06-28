@@ -1,19 +1,6 @@
-import re
 import _thread
-import praw
-import secrets
-
-mylock = _thread.allocate_lock()
-num_threads = 0
-thread_started = False
-
-input = open("inputTest", 'w')
-output = open("outputTest", 'w')
-reddit = praw.Reddit(client_id= secrets.client_id,
-                             client_secret= secrets.client_secret,
-                             password= secrets.password,
-                             user_agent='create dataset',
-                             username= secrets.user)
+import re
+from Data.data_config import *
 
 class GenData(object):
     def __init__(self, subreddit):
@@ -55,11 +42,6 @@ class GenData(object):
 
     def stringJoin(self, string):
         string = string.replace("\r", " ")
-        #tempSplit = string.split(" ")
-        #temp = ""
-        #for c in tempSplit:
-        #    temp += c + " "
-        #string = temp
         splitStr = string.split('\n')
         strJoin = ""
         for s in splitStr:
@@ -69,7 +51,7 @@ class GenData(object):
         strJoin = re.sub('\\\\', '', strJoin)
         return strJoin.lower()
 
-    def generateData(self, age = 'all', limit = 50):
+    def generateData(self, age = 'all', limit = 1):
         my_dict = dict()
         global num_threads
         global thread_started
@@ -113,12 +95,10 @@ class GenData(object):
 def main():
     global num_threads
     global thread_started
-    white_list = ['philosophy', 'askreddit', 'casualconversation', 'iama', 'all', "Showerthoughts", "todayilearned", "politics", "IWantToLearn", "news"]
-    #white_list = ['askreddit']
     for subreddit in white_list:
         mysub = GenData(str(subreddit))
-        _thread.start_new_thread(mysub.generateData, ())
-        _thread.start_new_thread(mysub.generateData, ("week", 50))
+        _thread.start_new_thread(mysub.generateData, (age_1, age_1_limit))
+        _thread.start_new_thread(mysub.generateData, (age_2, age_2_limit))
     while not thread_started:
         pass
     while num_threads>0:

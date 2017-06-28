@@ -3,6 +3,7 @@ import re
 import praw
 import secrets
 
+
 class redditPost(object):
     def __init__(self, subreddit):
         self.subreddit = subreddit
