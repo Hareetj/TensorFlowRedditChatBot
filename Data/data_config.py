@@ -1,6 +1,7 @@
 import praw
 from future.moves import _thread
-import secrets
+
+from Data import secrets
 
 mylock = _thread.allocate_lock()
 num_threads = 0
@@ -9,10 +10,10 @@ thread_started = False
 input = open("inputTest", 'w')
 output = open("outputTest", 'w')
 reddit = praw.Reddit(client_id= secrets.client_id,
-                             client_secret= secrets.client_secret,
-                             password= secrets.password,
-                             user_agent='create dataset',
-                             username= secrets.user)
+                     client_secret= secrets.client_secret,
+                     password= secrets.password,
+                     user_agent='create dataset',
+                     username= secrets.user)
 
 age_1 = "all"
 age_1_limit = 1

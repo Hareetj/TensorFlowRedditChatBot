@@ -1,17 +1,16 @@
-import re
-
 import praw
-import secrets
+
+from Data import secrets
 
 
 class redditPost(object):
     def __init__(self, subreddit):
         self.subreddit = subreddit
         self.reddit = praw.Reddit(client_id= secrets.client_id,
-                             client_secret= secrets.client_secret,
-                             password= secrets.password,
-                             user_agent='commenter',
-                             username= secrets.user)
+                                  client_secret= secrets.client_secret,
+                                  password= secrets.password,
+                                  user_agent='commenter',
+                                  username= secrets.user)
 
     def postComment(self, subreddit):
         reddit = self.reddit
