@@ -8,12 +8,12 @@ from keras.preprocessing.sequence import pad_sequences
 from seq2seq_utils import *
 
 ap = argparse.ArgumentParser()
-ap.add_argument('-max_len', type=int, default=500)
+ap.add_argument('-max_len', type=int, default=300)
 ap.add_argument('-vocab_size', type=int, default=60000)
 ap.add_argument('-batch_size', type=int, default=50)
 ap.add_argument('-layer_num', type=int, default=3)
 ap.add_argument('-hidden_dim', type=int, default=1000)
-ap.add_argument('-nb_epoch', type=int, default=20)
+ap.add_argument('-nb_epoch', type=int, default=2000)
 ap.add_argument('-mode', default='train')
 args = vars(ap.parse_args())
 
@@ -67,7 +67,10 @@ if __name__ == '__main__':
 
             # Training 1000 sequences at a time
             for i in range(0, len(X), 1000):
-                i_end = len(X)
+                if i + 1000 >= len(X):
+                    i_end = len(X)
+                else:
+                    i_end = i + 1000
                 y_sequences = process_data(y[i:i_end], y_max_len, y_word_to_ix)
 
                 print('[INFO] Training model: epoch {}th {}/{} samples'.format(k, i, len(X)))
@@ -85,9 +88,12 @@ if __name__ == '__main__':
             X_test = pad_sequences(X_test, maxlen=X_max_len, dtype='int32')
             model.load_weights(saved_weights)
             predictions = np.argmax(model.predict(X_test), axis=2)
-            sequences = []
+            sequences = list()
+            word = ""
             for prediction in predictions:
-                sequence = ' '.join([y_ix_to_word(index) for index in prediction if index > 0])
-                print(sequence)
-                sequences.append(sequence)
+                for index in prediction:
+                    if index > 0:
+                        word += y_ix_to_word[index]+ " "
+                print(word)
+                sequences.append(word)
             np.savetxt('test_result', sequences, fmt='%s')
