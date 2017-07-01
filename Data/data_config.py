@@ -16,9 +16,10 @@ reddit = praw.Reddit(client_id= secrets.client_id,
                      username= secrets.user)
 
 age_1 = "all"
-age_1_limit = 50
+age_1_limit = 1200
 age_2 = "week"
-age_2_limit = 50
+age_2_limit = 750
 
 white_list = ['philosophy', 'askreddit', 'casualconversation', 'iama', 'all', "Showerthoughts", "todayilearned",
-              "politics", "IWantToLearn", "news"]
+              "politics", "IWantToLearn", "news", "askhistory", "askscience", "explainlikeimfive", "doesanybodyelse", "changemyview", "crazyideas", "relationships", "howtonotgiveafuck", "quotes", "tipofmytongue", "casualconversation"
+              ,"askwomen", "askmen", "askculinary", "trueaskreddit", "tifu", "confessions", "howto", "everymanshouldknow", "college", "education", "wikipedia", "business", "history"]

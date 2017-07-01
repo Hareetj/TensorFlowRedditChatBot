@@ -9,9 +9,9 @@ class GenData(object):
 
     def qualifyData(self, string):
         string = string.lower()
-        if len(string) > 1000:
+        if len(string) > 300:
             return False
-        if len(string) < 50:
+        if len(string) < 0:
             return False
         if string == " ":
             return False
@@ -30,6 +30,10 @@ class GenData(object):
         if "/u" in string:
             return False
         if "/r" in string:
+            return False
+        if "u/" in string:
+            return False
+        if "r/" in string:
             return False
         isascii = lambda string: len(string) == len(string.encode())
         if not isascii(string):
